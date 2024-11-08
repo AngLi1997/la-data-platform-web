@@ -10,75 +10,75 @@ const menus = ref([] as LaMenuType[])
 menus.value = [{
         id:"1",
         label:"系统管理",
-        icon:"system",
+        icon:"Setting",
         children:[{
             id:"11",
             label:"用户管理",
-            icon:"user",
+            icon:"User",
             path: "/system/user",
             children:[]
         },{
             id:"12",
             label:"角色管理",
-            icon:"role",
+            icon:"Avatar",
             path: "/system/role",
             children:[]
         },{
             id:"13",
             label:"权限管理",
-            icon:"permission",
+            icon:"View",
             path: "/system/permission",
             children:[]
         },{
             id:"14",
             label:"菜单管理",
-            icon:"menu",
+            icon:"MessageBox",
             path: "/system/menu",
             children:[]
         }]
     },{
         id:"2",
         label:"运维管理",
-        icon:"pm",
+        icon:"Operation",
         children:[{
             id:"21",
             label:"数据源管理",
-            icon:"pm",
+            icon:"Connection",
             path: "/om/datasource",
             children:[]
         },{
             id:"22",
             label:"接口管理",
-            icon:"pm",
+            icon:"Link",
             path: "/om/api",
             children:[]
         },{
             id:"23",
             label:"服务管理",
-            icon:"pm",
+            icon:"MostlyCloudy",
             path: "/om/service",
             children:[]
         },{
             id:"24",
             label:"文档管理",
-            icon:"pm",
+            icon:"Document",
             path: "/om/doc",
             children:[]
         }]
     },{
         id:"3",
         label:"流程管理",
-        icon:"pm",
+        icon:"VideoPlay",
         children:[{
             id:"31",
             label:"流程配置",
-            icon:"pm",
+            icon:"Finished",
             path: "/process/processConfig",
             children:[]
         },{
             id:"32",
             label:"表单管理",
-            icon:"pm",
+            icon:"Tickets",
             path: "/process/formConfig",
             children:[]
         }]
@@ -109,7 +109,7 @@ menus.value = [{
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-around;
-    height: calc(100vh - 20px);
+    height: 100vh;
 }
 #menu {
     width: 250px;
@@ -119,7 +119,7 @@ menus.value = [{
 #nav {
     flex-grow: 1;
 }
-.p-menu-item-content {
-    margin: 10px;
+.el-menu {
+    height: 100vh;
 }
 </style>
