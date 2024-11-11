@@ -9,7 +9,7 @@
                 </template>
             </ElInput>
             <div>
-                <ElButton type="primary" icon="Plus">创建数据源</ElButton>
+                <ElButton type="primary" icon="Plus" @click="createDatasource">创建数据源</ElButton>
                 <ElButton icon="Refresh">刷新查询</ElButton>
             </div>
         </div>
@@ -46,11 +46,63 @@
         </ElTable>
         </div>
     </div>
+    <ElDialog title="数据源" v-model="formVisiable">
+        <LaForm :ref="form" :forms="formFields" v-model:data="formData" />
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button>取消</el-button>
+                <el-button type="primary" @click="saveDatasource">保存</el-button>
+            </div>
+        </template>
+    </ElDialog>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
-import { ElTable, ElTableColumn, ElDropdown, ElDropdownItem, ElDropdownMenu, ElButtonGroup, ElButton, ElInput, ElIcon } from 'element-plus';
+import { reactive, ref } from 'vue';
+import { ElTable, ElTableColumn, ElDropdown, ElDropdownItem, ElDropdownMenu, ElButton, ElInput, ElIcon, ElDialog } from 'element-plus';
+import type { FormInstance } from 'element-plus';
 import { Search } from '@element-plus/icons-vue';
+import LaForm from '@/components/form/LaForm.vue';
+
+const form = ref();
+
+const formFields = ref([{
+    type: 'input',
+    label: '数据源名称',
+    prop: 'name',
+    placeholder: '请输入数据源名称'
+},{
+    type: 'select',
+    label: '数据源类型',
+    prop: 'type',
+    placeholder: '请选择数据源类型'
+},{
+    type: 'input',
+    label: '主机',
+    prop: 'host',
+    placeholder: '请输入主机地址'
+},{
+    type: 'number',
+    label: '端口',
+    prop: 'port',
+    placeholder: '请输入端口号'
+},{
+    type: 'input',
+    label: '用户名',
+    prop: 'username',
+    placeholder: '请输入数据源用户名'
+},{
+    type: 'password',
+    label: '密码',
+    prop: 'password',
+    placeholder: '请输入数据源密码'
+},{
+    type: 'input',
+    label: '数据库名',
+    prop: 'schema',
+    placeholder: '请输入数据库名称'
+}])
+
+const formData = ref();
 
 const datasource = ref([{
     id: 1,
@@ -71,6 +123,17 @@ const datasource = ref([{
     schema: 'test',
     status: '连接失败'
 }]);
+
+const formVisiable = ref(true);
+
+const createDatasource = () => {
+    formVisiable.value = true;
+}
+
+const saveDatasource = () => {
+    console.log(form.value);
+}
+
 </script>
 <style scoped>
 
