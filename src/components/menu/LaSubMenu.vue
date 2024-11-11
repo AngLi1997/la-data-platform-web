@@ -10,23 +10,23 @@
 </script>
 <template>
     <template v-for="menu in menus" :key="menu.id">
-        <el-sub-menu v-if="menu.children?.length !== 0" :index="menu.id">
+        <ElSubMenu v-if="menu.children?.length !== 0" :index="menu.id">
             <template #title>
-                <el-icon>
+                <ElIcon>
                     <component :is="menu.icon" />
-                </el-icon>
+                </ElIcon>
                 <span>{{menu.label}}</span>
             </template>
             <la-sub-menu v-if="menu.children?.length !== 0" :menus="menu.children"/>
-        </el-sub-menu>
-        <router-link v-else :to="menu.path || ''">
-            <el-menu-item :index="menu.id">
-                <el-icon>
+        </ElSubMenu>
+        <RouterLink v-else :to="menu.path || ''">
+            <ElMenuItem :index="menu.id">
+                <ElIcon>
                     <component :is="menu.icon" />
-                </el-icon>
+                </ElIcon>
                 <template #title>{{menu.label}}</template>
-            </el-menu-item>
-        </router-link>
+            </ElMenuItem>
+        </RouterLink>
     </template>
 </template>
 <style scoped>

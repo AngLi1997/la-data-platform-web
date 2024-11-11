@@ -7,6 +7,8 @@ import LaSubMenu from '@/components/menu/LaSubMenu.vue';
 
 const menus = ref([] as LaMenuType[])
 
+const collapse = ref(false)
+
 menus.value = [{
         id:"1",
         label:"系统管理",
@@ -88,36 +90,26 @@ menus.value = [{
 </script>
 
 <template>
-    <div id="content">
-        <div id="menu">
-            <el-menu>
-                <la-sub-menu :menus="menus"></la-sub-menu>
-            </el-menu>
-        </div>
-        <div id="nav">
-            <router-view/>
-        </div>
-    </div>
+    <ElContainer>
+        <ElAside width="200px">
+            <ElMenu :collapse="collapse">
+                <LaSubMenu :menus="menus">
+                    
+                </LaSubMenu>
+            </ElMenu>
+        </ElAside>
+        <ElContainer>
+            <div id="content-main">
+                <router-view/>
+            </div>
+        </ElContainer>
+    </ElContainer>
 </template>
 
 <style scoped>
-#topbar {
-    height: 70px;
-}
-#content {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-around;
-    height: 100vh;
-}
-#menu {
-    width: 250px;
-    margin-right: 10px;
-    flex-grow: 0;
-}
-#nav {
+#content-main {
     flex-grow: 1;
+    margin: 10px;
 }
 .el-menu {
     height: 100vh;
