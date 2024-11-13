@@ -1,6 +1,6 @@
 <script setup lang="ts">   
 import { ElInputNumber, ElInput, ElSelect, ElForm, ElFormItem } from 'element-plus';
-import type { FormInstance } from 'element-plus';
+import type { FormInstance, FormValidateCallback } from 'element-plus';
 import type { LaFormFieldType } from './LaFromFieldType'; 
 import { reactive, ref, watch } from 'vue';
 
@@ -16,10 +16,6 @@ const props = defineProps({
     data: {
         type: Object,
         default: () => reactive<FormData>({})
-    },
-    ref: {
-        type: Object,
-        default: () => ref<FormInstance>()
     }
 })
 const formRef = ref<FormInstance>();
@@ -32,13 +28,11 @@ watch(formData, () => {
     emit('update:data', formData)
 });
 
-const getValue = () => {
-    formRef.value?.validate(valid => {
-        if(valid) {
-            emit('update:data', formData)
-        }
-    })
+const validate = (callback: FormValidateCallback) => {
+    return formRef.value?.validate(callback);
 }
+
+defineExpose({ validate })
 
 </script>
 <template>

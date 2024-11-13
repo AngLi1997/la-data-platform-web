@@ -47,7 +47,7 @@
         </div>
     </div>
     <ElDialog title="数据源" v-model="formVisiable">
-        <LaForm :ref="form" :forms="formFields" v-model:data="formData" />
+        <LaForm :ref="form" :forms="formFields" v-model:data="formData"/>
         <template #footer>
             <div class="dialog-footer">
                 <el-button>取消</el-button>
@@ -57,19 +57,25 @@
     </ElDialog>
 </template>
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
 import { ElTable, ElTableColumn, ElDropdown, ElDropdownItem, ElDropdownMenu, ElButton, ElInput, ElIcon, ElDialog } from 'element-plus';
-import type { FormInstance } from 'element-plus';
 import { Search } from '@element-plus/icons-vue';
 import LaForm from '@/components/form/LaForm.vue';
 
 const form = ref();
 
+const formData = ref();
+
 const formFields = ref([{
     type: 'input',
     label: '数据源名称',
     prop: 'name',
-    placeholder: '请输入数据源名称'
+    placeholder: '请输入数据源名称',
+    rules: [{
+        required: true,
+        message: '请输入数据源名称',
+        trigger: 'blur'
+    }]
 },{
     type: 'select',
     label: '数据源类型',
@@ -102,8 +108,6 @@ const formFields = ref([{
     placeholder: '请输入数据库名称'
 }])
 
-const formData = ref();
-
 const datasource = ref([{
     id: 1,
     name: '默认数据源',
@@ -131,7 +135,10 @@ const createDatasource = () => {
 }
 
 const saveDatasource = () => {
-    console.log(form.value);
+    form.value.validate((isValid: boolean, errors: any) => {
+        console.log(isValid);
+        console.log(errors);
+    })
 }
 
 </script>
