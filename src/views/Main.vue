@@ -15,7 +15,7 @@ menus.value = [{
         icon:"VideoPlay",
         children:[{
             id:"32",
-            label:"表单管理",
+            label:"表单编辑",
             icon:"Tickets",
             path: "/process/formConfig",
             children:[]
