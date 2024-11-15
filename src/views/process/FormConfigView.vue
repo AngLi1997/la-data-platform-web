@@ -1,9 +1,14 @@
 <template>
     <div id="content-view">
-        <Editor id="editor" v-model="content" :init="init" />
+        <div id="content-view-top" style="justify-content: left;">
+            <ElButton @click="getHtml">外部获取xml</ElButton>
+            <ElButton @click="addComponent(tinymce.get('editor'))">外部添加组件</ElButton>
+        </div>
+        <div id="content-view-main">
+            <Editor id="editor" v-model="content" :init="init" />
+        </div>
     </div>
 </template>
-
 <script setup>
 import Editor from '@tinymce/tinymce-vue';
 import tinymce from 'tinymce/tinymce';
@@ -15,6 +20,9 @@ import 'tinymce/icons/default';
 import 'tinymce/langs/zh_CN';
 import 'tinymce/plugins/code';
 import 'tinymce/plugins/table';
+import 'tinymce/plugins/preview';
+import axios from 'axios';
+import { ElMessageBox } from 'element-plus';
 
 const content = ref('')
 
@@ -24,29 +32,48 @@ const init = {
   height: '100%',
   promotion:false,
   branding: false,
-  plugins: ['code', 'table', 'bmos'], //引入工具插件
-  toolbar: ['code table bmos'], //工具栏显示
-  menubar: false,
+  plugins: ['code', 'table', 'addComponent', 'wordToHtml', 'preview'], //引入工具插件
+  toolbar: ['preview code table addComponent wordToHtml'], //工具栏显示
+  menubar: true,
   line_height_formats: '1 1.2 1.4 1.6 2', //行高
   font_size_formats: '12px 14px 16px 18px 20px 22px 24px 28px 32px 36px 48px 56px 72px', //字体大小
   font_family_formats:'微软雅黑=Microsoft YaHei,Helvetica Neue,PingFang SC,sans-serif;苹果苹方=PingFang SC,Microsoft YaHei,sans-serif;宋体=simsun,serif;仿宋体=FangSong,serif;黑体=SimHei,sans-serif;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;',
   content_css:'../../../../../src/assets/tinymce.css'
 }
-tinymce.PluginManager.add('bmos', (editor, url) => {
 
-    editor.ui.registry.addButton('bmos', {
-        text: 'bmos',
+tinymce.PluginManager.add('addComponent', (editor, url) => {
+
+    editor.ui.registry.addButton('addComponent', {
+        text: '添加业务组件',
         onAction: function () {
-            editor.insertContent('<input type="text" name="test" value="bmos"><br/>')
+            addComponent(editor)
         }
     });
     
     return {
         getMetadata: function () {
         return  {
-            //插件名和链接会显示在“帮助”→“插件”→“已安装的插件”中
-            name: "bmos",//插件名称
-            url: "http://exampleplugindocsurl.com", //作者网址
+            name: "bmos",
+            url: "http://liang.com"
+        };
+        }
+    };
+});
+
+tinymce.PluginManager.add('wordToHtml', (editor, url) => {
+
+    editor.ui.registry.addButton('wordToHtml', {
+        text: '导入word',
+        onAction: function () {
+            importWord(editor)
+        }
+    });
+
+    return {
+        getMetadata: function () {
+        return  {
+            name: "bmos",
+            url: "http://liang.com"
         };
         }
     };
@@ -54,7 +81,42 @@ tinymce.PluginManager.add('bmos', (editor, url) => {
 
 tinymce.init({})
 
+const getHtml = () => {
+    let info = tinymce.get('editor').getContent();
+    ElMessageBox.alert(info, 'html内容')
+}
+
+const addComponent = (editor) => {
+    let now = new Date()
+    let time = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate() + ' ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds()
+    editor.insertContent('<input type="text" value="' + time +'" />')
+}
+
+const importWord = (editor) => {
+    let input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', '.doc, .docx');
+    input.click();
+    input.onchange = function() {
+        var file = this.files[0];
+        let formData = new FormData();
+        formData.append('file', file)
+        axios.post('/api/process/form/convertToHtml', formData, {
+            headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(res => {
+            console.log(res.data)
+            editor.insertContent(res.data.data)
+        })
+        .finally(() => {
+            input.remove();  
+        })
+    }
+}
+
 </script>
+
 <style scoped>
 
 </style>
