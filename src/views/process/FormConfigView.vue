@@ -22,8 +22,10 @@ import 'tinymce/plugins/code';
 import 'tinymce/plugins/table';
 import 'tinymce/plugins/preview';
 import 'tinymce/plugins/image';
-import axios from 'axios';
+// import laAxios from 'axios';
+import laAxios from '@/api/LaAxios';
 import { ElMessageBox } from 'element-plus';
+import axios from 'axios';
 
 const content = ref('')
 
@@ -112,13 +114,9 @@ const importWord = (editor) => {
         var file = this.files[0];
         let formData = new FormData();
         formData.append('file', file)
-        axios.post('/api/process/form/convertToHtml', formData, {
-            headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }).then(res => {
+        laAxios.postFormData('/process/form/convertToHtml', formData).then(res => {
             console.log(res.data)
-            editor.insertContent(res.data.data)
+            editor.insertContent(res.data)
         })
         .finally(() => {
             input.remove();  

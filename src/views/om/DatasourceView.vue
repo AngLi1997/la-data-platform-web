@@ -47,7 +47,7 @@
         </div>
     </div>
     <ElDialog title="数据源" v-model="formVisiable">
-        <LaForm :ref="form" :forms="formFields" v-model:data="formData"/>
+        <LaForm ref="formRef" :forms="formFields" v-model:data="formData"/>
         <template #footer>
             <div class="dialog-footer">
                 <el-button>取消</el-button>
@@ -58,13 +58,17 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { ElTable, ElTableColumn, ElDropdown, ElDropdownItem, ElDropdownMenu, ElButton, ElInput, ElIcon, ElDialog } from 'element-plus';
+import { ElTable, ElTableColumn, ElDropdown, ElDropdownItem, ElDropdownMenu, ElButton, ElInput, ElIcon, ElDialog, type FormValidateCallback } from 'element-plus';
 import { Search } from '@element-plus/icons-vue';
 import LaForm from '@/components/form/LaForm.vue';
+import laAxois from '@/api/LaAxios';
+import type { SelectOption } from '@/components/form/SelectOption';
 
-const form = ref();
+const formRef = ref();
 
 const formData = ref();
+
+const datasourceTypeList = ref<SelectOption[]>([]);
 
 const formFields = ref([{
     type: 'input',
@@ -78,6 +82,7 @@ const formFields = ref([{
     }]
 },{
     type: 'select',
+    options: datasourceTypeList,
     label: '数据源类型',
     prop: 'type',
     placeholder: '请选择数据源类型'
@@ -128,17 +133,29 @@ const datasource = ref([{
     status: '连接失败'
 }]);
 
-const formVisiable = ref(true);
+const formVisiable = ref(false);
 
 const createDatasource = () => {
     formVisiable.value = true;
+    laAxois.get('/datasource/type/list').then((res: any) => {
+        datasourceTypeList.value = res.data.map((item: any) => {
+            return {
+                key: item.id,
+                label: item.name + " | " + item.driverClassName,
+                value: item.id
+            }
+        });
+    })
 }
 
 const saveDatasource = () => {
-    form.value.validate((isValid: boolean, errors: any) => {
-        console.log(isValid);
-        console.log(errors);
-    })
+    formRef.value
+        .submit()
+        .then((res: any) => {
+            console.log(res);
+        }).catch((err: any) => {
+            console.log(err);
+        })
 }
 
 </script>

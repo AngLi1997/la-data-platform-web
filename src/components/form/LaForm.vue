@@ -3,9 +3,17 @@ import { ElInputNumber, ElInput, ElSelect, ElForm, ElFormItem } from 'element-pl
 import type { FormInstance, FormValidateCallback } from 'element-plus';
 import type { LaFormFieldType } from './LaFromFieldType'; 
 import { reactive, ref, watch } from 'vue';
+import { fa, tr } from 'element-plus/es/locales.mjs';
 
 interface FormData {
     [key: string]: any;
+}
+
+interface ValidatedFormData {
+    validated: boolean;
+    data: FormData;
+    error?: any;
+    
 }
 
 const props = defineProps({
@@ -28,18 +36,47 @@ watch(formData, () => {
     emit('update:data', formData)
 });
 
-const validate = (callback: FormValidateCallback) => {
-    return formRef.value?.validate(callback);
+const submit = (): Promise<ValidatedFormData> => {
+    if (!formRef.value) {
+        return Promise.reject<ValidatedFormData>({
+            validated: false,
+            formData: formData
+        });
+    }
+    return formRef.value?.validate()
+        .then((valid: boolean) => {
+            if (valid){
+                return new Promise<ValidatedFormData>((resolve, reject) => {
+                    resolve({
+                        validated: true,
+                        data: formData
+                    })
+                })
+            } else {
+                return Promise.reject<ValidatedFormData>({
+                        validated: false,
+                        formData: formData
+                    })
+            }
+        }).catch((err: any) => {
+            return Promise.reject<ValidatedFormData>({
+                        validated: false,
+                        formData: formData,
+                        error: err
+                    })
+        })
 }
 
-defineExpose({ validate })
+defineExpose({ submit })
 
 </script>
 <template>
     <ElForm label-width="auto" ref="formRef" :model="formData">
         <ElFormItem v-for="(item, index) in forms" :key="index" :label="item.label" :prop="item.prop" :rules="item.rules">
             <ElInput v-if="item.type === 'input'" :placeholder="item.placeholder" v-model="formData[item.prop]"></ElInput>
-            <ElSelect v-if="item.type === 'select'" :placeholder="item.placeholder" v-model="formData[item.prop]"></ElSelect>
+            <ElSelect v-if="item.type === 'select'" :placeholder="item.placeholder" v-model="formData[item.prop]">
+                <ElOption v-for="op in item.options" :key="op.key" :value="op.value" :label="op.label">{{ op.label }}</ElOption>
+            </ElSelect>
             <ElInput :show-password="false" v-if="item.type === 'password'" :placeholder="item.placeholder" v-model="formData[item.prop]"></ElInput>
             <ElInputNumber v-if="item.type === 'number'" v-model="formData[item.prop]"></ElInputNumber>
         </ElFormItem>
