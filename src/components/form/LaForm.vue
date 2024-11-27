@@ -1,9 +1,8 @@
 <script setup lang="ts">   
 import { ElInputNumber, ElInput, ElSelect, ElForm, ElFormItem } from 'element-plus';
-import type { FormInstance, FormValidateCallback } from 'element-plus';
+import type { FormInstance } from 'element-plus';
 import type { LaFormFieldType } from './LaFromFieldType'; 
 import { reactive, ref, watch } from 'vue';
-import { fa, tr } from 'element-plus/es/locales.mjs';
 
 interface FormData {
     [key: string]: any;
@@ -69,6 +68,16 @@ const submit = (): Promise<ValidatedFormData> => {
 
 defineExpose({ submit })
 
+const setDefaultValues = () => {
+    props.forms.forEach(item => {
+        if (item.defaultValue) {
+            formData[item.prop] = item.defaultValue;
+        }
+    })
+}
+
+setDefaultValues()
+
 </script>
 <template>
     <ElForm label-width="auto" ref="formRef" :model="formData">
@@ -79,6 +88,7 @@ defineExpose({ submit })
             </ElSelect>
             <ElInput :show-password="false" v-if="item.type === 'password'" :placeholder="item.placeholder" v-model="formData[item.prop]"></ElInput>
             <ElInputNumber v-if="item.type === 'number'" v-model="formData[item.prop]"></ElInputNumber>
+            <ElInput type="textarea" :rows="2" v-if="item.type === 'textarea'" :placeholder="item.placeholder" v-model="formData[item.prop]"></ElInput>
         </ElFormItem>
     </ElForm>
 </template>

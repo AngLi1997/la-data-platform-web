@@ -8,21 +8,6 @@ import LaSubMenu from '@/components/menu/LaSubMenu.vue';
 const menus = ref([] as LaMenuType[])
 
 const collapse = ref(false)
-
-// menus.value = [{
-//         id:"3",
-//         label:"流程管理",
-//         icon:"VideoPlay",
-//         children:[{
-//             id:"32",
-//             label:"表单编辑",
-//             icon:"Tickets",
-//             path: "/process/formConfig",
-//             children:[]
-//         }]
-//     }
-// ]
-
 menus.value = [{
         id:"1",
         label:"系统管理",
