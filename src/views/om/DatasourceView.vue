@@ -62,7 +62,7 @@
     </ElDialog>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { ElTable, ElTableColumn, ElDropdown, ElDropdownItem, ElDropdownMenu, ElButton, ElInput, ElIcon, ElDialog, ElMessage, ElMessageBox } from 'element-plus';
 import { Search } from '@element-plus/icons-vue';
 import LaForm from '@/components/form/LaForm.vue';
@@ -200,7 +200,9 @@ const deleteDatabasesConfig = (databaseId: string) => {
 }
 
 
-getDatabaseList()
+onMounted(() => {
+    getDatabaseList()
+})
 
 </script>
 <style scoped>

@@ -82,6 +82,12 @@ menus.value = [{
             icon:"Tickets",
             path: "/process/formConfig",
             children:[]
+        },{
+            id:"33",
+            label:"终端管理",
+            icon:"Tickets",
+            path: "/process/terminal",
+            children:[]
         }]
     }
 ]

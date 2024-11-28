@@ -10,6 +10,7 @@ import FormConfigView from '@/views/process/FormConfigView.vue'
 import UserView from '@/views/system/UserView.vue'
 import HomeView from '@/views/home/HomeView.vue'
 import ProcessConfigView from '@/views/process/ProcessConfigView.vue'
+import TerminalView from '@/views/system/TerminalView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -74,6 +75,10 @@ const router = createRouter({
           path: '/process/formConfig',
           name: '表单管理',
           component: FormConfigView
+        },{
+          path: '/process/terminal',
+          name: '表单管理',
+          component: TerminalView
         }
       ]
     }
