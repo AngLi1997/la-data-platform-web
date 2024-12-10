@@ -6,11 +6,11 @@ import DatasourceView from '@/views/om/DatasourceView.vue'
 import ApiView from '@/views/om/ApiView.vue'
 import ServiceView from '@/views/om/ServiceView.vue'
 import DocView from '@/views/om/DocView.vue'
-import FormConfigView from '@/views/process/FormConfigView.vue'
 import UserView from '@/views/system/UserView.vue'
 import HomeView from '@/views/home/HomeView.vue'
 import ProcessConfigView from '@/views/process/ProcessConfigView.vue'
 import TerminalView from '@/views/system/TerminalView.vue'
+import FormConfigView from '@/views/process/FormConfigView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -77,7 +77,7 @@ const router = createRouter({
           component: FormConfigView
         },{
           path: '/process/terminal',
-          name: '表单管理',
+          name: '终端管理',
           component: TerminalView
         }
       ]
