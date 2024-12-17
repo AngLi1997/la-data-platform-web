@@ -66,7 +66,9 @@ const submit = (): Promise<ValidatedFormData> => {
         })
 }
 
-defineExpose({ submit })
+const setFormData = (data: FormData) => {
+    Object.assign(formData, data)
+}
 
 const setDefaultValues = () => {
     props.forms.forEach(item => {
@@ -75,6 +77,8 @@ const setDefaultValues = () => {
         }
     })
 }
+
+defineExpose({ submit, setFormData })
 
 setDefaultValues()
 
