@@ -254,11 +254,7 @@ const testConnect = (databaseId: string) => {
     laAxois.get('/database/config/testConnect', {
         databaseId: databaseId
     }).then((res: any) => {
-        if (res.data) {
-            ElMessage.success("连接成功");
-        } else {
-            ElMessage.error("连接失败");
-        }
+        ElMessage.success("连接成功");     
     });
 }
 
